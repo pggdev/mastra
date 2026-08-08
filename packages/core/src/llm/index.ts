@@ -90,6 +90,7 @@ export type {
   ModelRouterModelId,
   Provider,
   ModelForProvider,
+  ProviderModelsMap,
   AttachmentCapabilities,
 } from './model/provider-registry.js';
 export { resolveModelConfig } from './model/resolve-model';

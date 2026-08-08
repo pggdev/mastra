@@ -583,6 +583,8 @@ describe('GatewayRegistry Auto-Refresh', () => {
     const firstTypes = fs.readFileSync(tempTypesPath, 'utf-8');
     expect(firstTypes).toContain("'test-provider': readonly ['model-a', 'model-b']");
     expect(firstTypes).not.toContain('new-provider');
+    expect(firstTypes).toContain('export interface ProviderModelsMap {');
+    expect(firstTypes).not.toContain('export type ProviderModelsMap =');
     expect(firstTypes).toContain('export type Provider = keyof ProviderModelsMap');
 
     // Second sync with updated data

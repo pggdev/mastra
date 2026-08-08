@@ -229,12 +229,12 @@ export function generateTypesContent(models: Record<string, string[]>): string {
  */
 
 /**
- * Provider models mapping type
- * This is derived from the JSON data and provides type-safe access
+ * Provider models mapping interface
+ * This is derived from the JSON data and can be extended through module augmentation
  */
-export type ProviderModelsMap = {
+export interface ProviderModelsMap {
 ${providerModelsEntries}
-};
+}
 
 /**
  * Union type of all registered provider IDs

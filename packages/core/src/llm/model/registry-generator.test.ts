@@ -26,6 +26,8 @@ describe('registry-generator', () => {
       expect(content).toContain('readonly _private:');
       expect(content).toContain('readonly $provider:');
       expect(content).toContain('readonly provider123:');
+      expect(content).toContain('export interface ProviderModelsMap {');
+      expect(content).not.toContain('export type ProviderModelsMap =');
     });
 
     it('should quote provider names with special characters', () => {

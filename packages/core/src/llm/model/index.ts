@@ -4,6 +4,7 @@ export {
   type ModelRouterModelId,
   type Provider,
   type ModelForProvider,
+  type ProviderModelsMap,
   type AttachmentCapabilities,
   modelSupportsAttachments,
   modelSupportsStructuredOutput,

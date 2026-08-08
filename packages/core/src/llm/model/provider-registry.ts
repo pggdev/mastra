@@ -14,10 +14,16 @@ import { MastraGateway } from './gateways/mastra.js';
 import { ModelsDevGateway } from './gateways/models-dev.js';
 import { NetlifyGateway } from './gateways/netlify.js';
 import staticRegistryJson from './provider-registry.json';
-import type { Provider, ModelForProvider, ModelRouterModelId, ProviderModels } from './provider-types.generated.js';
+import type {
+  Provider,
+  ModelForProvider,
+  ModelRouterModelId,
+  ProviderModels,
+  ProviderModelsMap,
+} from './provider-types.generated.js';
 
 // Re-export types for convenience
-export type { Provider, ModelForProvider, ModelRouterModelId, ProviderModels };
+export type { Provider, ModelForProvider, ModelRouterModelId, ProviderModels, ProviderModelsMap };
 export type { AttachmentCapabilities } from './gateways/base.js';
 
 interface RegistryData {

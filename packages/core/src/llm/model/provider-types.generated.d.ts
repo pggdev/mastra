@@ -4,10 +4,10 @@
  */
 
 /**
- * Provider models mapping type
- * This is derived from the JSON data and provides type-safe access
+ * Provider models mapping interface
+ * This is derived from the JSON data and can be extended through module augmentation
  */
-export type ProviderModelsMap = {
+export interface ProviderModelsMap {
   readonly zhipuai: readonly [
     'glm-4.5',
     'glm-4.5-air',
@@ -5638,7 +5638,7 @@ export type ProviderModelsMap = {
     'openai/o3-mini',
     'openai/o4-mini',
   ];
-};
+}
 
 /**
  * Union type of all registered provider IDs
