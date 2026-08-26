@@ -677,12 +677,9 @@ export function validateRequestContext<T = any>(
   // Convert PublicSchema to StandardSchemaWithJSON for validation
   const standardSchema = toStandardSchema(schema);
 
-  // Validate using standard schema interface
-  const validation = standardSchema['~standard'].validate(contextValues);
-
-  if (validation instanceof Promise) {
-    throw new Error('Your schema is async, which is not supported. Please use a sync schema.');
-  }
+  // Validate using the shared validator so schemas that return both a value and
+  // issues (such as Valibot with typed: false) are treated as invalid.
+  const validation = safeValidate(standardSchema, contextValues);
 
   if ('value' in validation) {
     return { data: validation.value };

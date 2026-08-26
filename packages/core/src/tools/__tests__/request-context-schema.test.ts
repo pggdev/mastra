@@ -1,7 +1,19 @@
+import * as v from 'valibot';
 import { describe, expect, it, vi } from 'vitest';
 import { z } from 'zod/v4';
 import { RequestContext } from '../../request-context';
 import { createTool } from '../tool';
+
+function withJsonSchema(schema: any) {
+  const jsonSchemaFn = () => ({ type: 'object' as const, properties: {} });
+
+  return {
+    '~standard': {
+      ...schema['~standard'],
+      jsonSchema: { input: jsonSchemaFn, output: jsonSchemaFn },
+    },
+  } as any;
+}
 
 describe('Tool requestContextSchema', () => {
   const requestContextSchema = z.object({
@@ -69,6 +81,49 @@ describe('Tool requestContextSchema', () => {
       expect(result).toHaveProperty('error', true);
       expect(result.message).toContain('Request context validation failed');
       expect(result.message).toContain('userId');
+    });
+
+    it('should reject invalid Valibot request context when validation returns a value and issues', async () => {
+      const requestContextSchema = withJsonSchema(v.object({ role: v.string() }));
+      const executeFn = vi.fn().mockResolvedValue({ success: true });
+      const tool = createTool({
+        id: 'valibot-tool',
+        description: 'A Valibot request-context tool',
+        requestContextSchema,
+        execute: executeFn,
+      });
+
+      const requestContext = new RequestContext();
+      requestContext.set('role', 42);
+
+      const result = await tool.execute!({}, { requestContext });
+
+      expect(executeFn).not.toHaveBeenCalled();
+      expect(result).toHaveProperty('error', true);
+      expect(result.message).toContain('Request context validation failed');
+      expect(result.message).toContain('role');
+    });
+
+    it('should execute with a valid Valibot request context', async () => {
+      const requestContextSchema = withJsonSchema(v.object({ role: v.string() }));
+      let receivedRole: unknown;
+      const tool = createTool({
+        id: 'valibot-tool',
+        description: 'A Valibot request-context tool',
+        requestContextSchema,
+        execute: async (_, { requestContext }) => {
+          receivedRole = requestContext.get('role');
+          return { success: true };
+        },
+      });
+
+      const requestContext = new RequestContext();
+      requestContext.set('role', 'admin');
+
+      const result = await tool.execute!({}, { requestContext });
+
+      expect(receivedRole).toBe('admin');
+      expect(result).toEqual({ success: true });
     });
 
     it('should include tool ID in error message', async () => {
